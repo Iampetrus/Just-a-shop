@@ -3,11 +3,11 @@
 import React from 'react';
 import { Box, Button, Container, CssBaseline, FormControl, InputLabel, TextField, Typography, Link } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-
+/*
 const ModeToggle: React.FC = () => {
   const theme = useTheme();
   const [darkMode, setDarkMode] = React.useState(theme.palette.mode === 'dark');
-
+  
   const handleToggle = () => {
     setDarkMode(!darkMode);
     // Aquí se debería manejar el cambio del tema global si lo tienes configurado
@@ -19,7 +19,7 @@ const ModeToggle: React.FC = () => {
     </Button>
   );
 };
-
+*/
 const Login: React.FC = () => {
   return (
     <Container component="main" maxWidth="xs">
@@ -32,7 +32,7 @@ const Login: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        <ModeToggle />
+        {/* <ModeToggle /> */}
         <Typography component="h1" variant="h5">
           Welcome!
         </Typography>
@@ -88,3 +88,4 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
