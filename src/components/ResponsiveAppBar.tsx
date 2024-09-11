@@ -15,7 +15,7 @@ import { AccountCircle } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 // Este es el nuevo array que contiene las opciones del submenú de Products
-const productSubmenu = ["A", "B", "C", "D", "E"];
+const commonSubmenu = ["A", "B", "C", "D", "E"];
 const pages = ["Home", "Products", "About"];
 const settings = ["Sign in or Register"];
 
@@ -26,9 +26,15 @@ function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-  // Nuevo estado para manejar el submenú de Products
+  // Nuevo estado para manejar el submenú de Products, Home, About
   const [anchorElProduct, setAnchorElProduct] =
     React.useState<null | HTMLElement>(null);
+  const [anchorElHome, setAnchorElHome] = React.useState<null | HTMLElement>(
+    null
+  );
+  const [anchorElAbout, setAnchorElAbout] = React.useState<null | HTMLElement>(
+    null
+  );
 
   const navigate = useNavigate();
 
@@ -45,12 +51,25 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
-  // Funciones para abrir/cerrar el submenú de Products
+  // Funciones para abrir/cerrar submenús
   const handleOpenProductMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElProduct(event.currentTarget);
   };
   const handleCloseProductMenu = () => {
     setAnchorElProduct(null);
+  };
+  const handleOpenHomeMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElHome(event.currentTarget);
+  };
+  const handleCloseHomeMenu = () => {
+    setAnchorElHome(null);
+  };
+
+  const handleOpenAboutMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElAbout(event.currentTarget);
+  };
+  const handleCloseAboutMenu = () => {
+    setAnchorElAbout(null);
   };
 
   return (
@@ -134,7 +153,7 @@ function ResponsiveAppBar() {
                         open={Boolean(anchorElProduct)}
                         onClose={handleCloseProductMenu}
                       >
-                        {productSubmenu.map((submenuItem) => (
+                        {commonSubmenu.map((submenuItem) => (
                           <MenuItem
                             key={submenuItem}
                             onClick={() => {
@@ -179,12 +198,85 @@ function ResponsiveAppBar() {
 
             {/* ---------------------------------------------- Botones de navegación para pantallas grandes */}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {/* Aquí cambiamos Products para que abra el submenú */}
-              {pages.map((page) =>
-                page === "Products" ? (
-                  <Box key={page}>
+              {pages.map((page) => {
+                if (
+                  page === "Products" ||
+                  page === "Home" ||
+                  page === "About"
+                ) {
+                  const openMenuHandler =
+                    page === "Products"
+                      ? handleOpenProductMenu
+                      : page === "Home"
+                      ? handleOpenHomeMenu
+                      : handleOpenAboutMenu;
+
+                  const anchorEl =
+                    page === "Products"
+                      ? anchorElProduct
+                      : page === "Home"
+                      ? anchorElHome
+                      : anchorElAbout;
+
+                  const handleCloseMenu =
+                    page === "Products"
+                      ? handleCloseProductMenu
+                      : page === "Home"
+                      ? handleCloseHomeMenu
+                      : handleCloseAboutMenu;
+
+                  const submenuId =
+                    page === "Products"
+                      ? "product-submenu"
+                      : page === "Home"
+                      ? "home-submenu"
+                      : "about-submenu";
+
+                  return (
+                    <Box key={page}>
+                      <Button
+                        onClick={openMenuHandler}
+                        sx={{
+                          my: 2,
+                          color: "#000000",
+                          display: "block",
+                          padding: "10px 20px",
+                          margin: "0 5px",
+                          fontWeight: 500,
+                          "&:hover": {
+                            fontWeight: 700,
+                          },
+                        }}
+                      >
+                        {page}
+                      </Button>
+                      <Menu
+                        id={submenuId}
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleCloseMenu}
+                      >
+                        {commonSubmenu.map((submenuItem) => (
+                          <MenuItem
+                            key={submenuItem}
+                            onClick={() => {
+                              handleCloseMenu();
+                              navigate(`/${page}/${submenuItem}`);
+                            }}
+                          >
+                            <Typography sx={{ color: "#000000" }}>
+                              {submenuItem}
+                            </Typography>
+                          </MenuItem>
+                        ))}
+                      </Menu>
+                    </Box>
+                  );
+                } else {
+                  return (
                     <Button
-                      onClick={handleOpenProductMenu} // Abrimos el submenú
+                      key={page}
+                      onClick={() => navigate(`/${page}`)}
                       sx={{
                         my: 2,
                         color: "#000000",
@@ -199,47 +291,9 @@ function ResponsiveAppBar() {
                     >
                       {page}
                     </Button>
-                    <Menu
-                      id="product-submenu"
-                      anchorEl={anchorElProduct}
-                      open={Boolean(anchorElProduct)}
-                      onClose={handleCloseProductMenu}
-                    >
-                      {productSubmenu.map((submenuItem) => (
-                        <MenuItem
-                          key={submenuItem}
-                          onClick={() => {
-                            handleCloseProductMenu();
-                            navigate(`/Products/${submenuItem}`);
-                          }}
-                        >
-                          <Typography sx={{ color: "#000000" }}>
-                            {submenuItem}
-                          </Typography>
-                        </MenuItem>
-                      ))}
-                    </Menu>
-                  </Box>
-                ) : (
-                  <Button
-                    key={page}
-                    onClick={() => navigate(`/${page}`)}
-                    sx={{
-                      my: 2,
-                      color: "#000000",
-                      display: "block",
-                      padding: "10px 20px",
-                      margin: "0 5px",
-                      fontWeight: 500,
-                      "&:hover": {
-                        fontWeight: 700,
-                      },
-                    }}
-                  >
-                    {page}
-                  </Button>
-                )
-              )}
+                  );
+                }
+              })}
             </Box>
 
             {/* Menú de usuario */}
