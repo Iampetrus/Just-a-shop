@@ -71,7 +71,6 @@ function ResponsiveAppBar() {
               }}
             >
               {/* ---------------------------------------------- LOGO pantallas grandes */}
-
               <Typography
                 variant="h6"
                 noWrap
@@ -119,13 +118,45 @@ function ResponsiveAppBar() {
                 onClose={handleCloseNavMenu}
                 sx={{ display: { xs: "block", md: "none" } }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center" sx={{ color: "#000000" }}>
-                      {page}
-                    </Typography>
-                  </MenuItem>
-                ))}
+                {pages.map((page) =>
+                  page === "Products" ? (
+                    <Box key={page}>
+                      <MenuItem
+                        onClick={handleOpenProductMenu}
+                        sx={{ color: "#000000" }}
+                      >
+                        <Typography textAlign="center">{page}</Typography>
+                      </MenuItem>
+                      {/* Submenú de Products */}
+                      <Menu
+                        id="product-submenu-mobile"
+                        anchorEl={anchorElProduct}
+                        open={Boolean(anchorElProduct)}
+                        onClose={handleCloseProductMenu}
+                      >
+                        {productSubmenu.map((submenuItem) => (
+                          <MenuItem
+                            key={submenuItem}
+                            onClick={() => {
+                              handleCloseProductMenu();
+                              navigate(`/Products/${submenuItem}`);
+                            }}
+                          >
+                            <Typography sx={{ color: "#000000" }}>
+                              {submenuItem}
+                            </Typography>
+                          </MenuItem>
+                        ))}
+                      </Menu>
+                    </Box>
+                  ) : (
+                    <MenuItem key={page} onClick={handleCloseNavMenu}>
+                      <Typography textAlign="center" sx={{ color: "#000000" }}>
+                        {page}
+                      </Typography>
+                    </MenuItem>
+                  )
+                )}
               </Menu>
             </Box>
 

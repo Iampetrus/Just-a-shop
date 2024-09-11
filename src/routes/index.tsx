@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Login from "../components/LoginRegister";
+import Home from "../pages/Shop";
+import About from "../pages/About";
 
 const r = createBrowserRouter([
   {
@@ -17,7 +19,7 @@ const r = createBrowserRouter([
     element: (
       <>
         <ResponsiveAppBar />
-        Home
+        <Home /> 
       </>
     ),
   },
@@ -35,7 +37,7 @@ const r = createBrowserRouter([
     element: (
       <>
         <ResponsiveAppBar />
-        About
+        <About />
       </>
     ),
   },
