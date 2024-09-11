@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
-import Login from "../pages/LoginRegister";
+import Login from "../components/LoginRegister";
+
 const r = createBrowserRouter([
   {
     path: "/",
@@ -60,3 +61,7 @@ const r = createBrowserRouter([
   },
 ]);
 export default r;
+
+
+
+

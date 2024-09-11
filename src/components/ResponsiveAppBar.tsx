@@ -1,5 +1,3 @@
-// src/components/ResponsiveAppBar.tsx
-
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -14,9 +12,10 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { AccountCircle } from "@mui/icons-material";
-import { ListItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+// Este es el nuevo array que contiene las opciones del submenú de Products
+const productSubmenu = ["A", "B", "C", "D", "E"];
 const pages = ["Home", "Products", "About"];
 const settings = ["Sign in or Register"];
 
@@ -27,6 +26,10 @@ function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+  // Nuevo estado para manejar el submenú de Products
+  const [anchorElProduct, setAnchorElProduct] =
+    React.useState<null | HTMLElement>(null);
+
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -35,45 +38,40 @@ function ResponsiveAppBar() {
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  // Funciones para abrir/cerrar el submenú de Products
+  const handleOpenProductMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElProduct(event.currentTarget);
+  };
+  const handleCloseProductMenu = () => {
+    setAnchorElProduct(null);
   };
 
   return (
     <AppBar
       position="static"
-      sx={{
-        padding: "",
-        backgroundColor: "#ffffff",
-        boxShadow: "none",
-      }}
+      sx={{ backgroundColor: "#ffffff", boxShadow: "none" }}
     >
-      {" "}
-      {/* Aplicando padding al AppBar */}
       <Container maxWidth="xl">
-        <Box
-          sx={{
-            borderBottom: "1px solid #000000", // Línea fina negra
-            padding: "0 20px", // padding para la línea no llegue hasta los bordes
-          }}
-        >
+        <Box sx={{ borderBottom: "1px solid #000000", padding: "0 20px" }}>
           <Toolbar disableGutters sx={{ padding: "30px" }}>
-            {" "}
-            {/* Padding en el Toolbar */}
             <Button
               onClick={() => navigate("/empty")}
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
-                textTransform: "none", // Para que el texto no se muestre en mayúsculas
-                padding: "0", // Para eliminar el padding adicional del Button
+                textTransform: "none",
+                padding: "0",
               }}
             >
+              {/* ---------------------------------------------- LOGO pantallas grandes */}
+
               <Typography
                 variant="h6"
                 noWrap
@@ -83,16 +81,15 @@ function ResponsiveAppBar() {
                   fontFamily: "monospace",
                   fontWeight: 700,
                   letterSpacing: ".3rem",
-                  color: "#000000", //  logo color
-                  textDecoration: "none",
-                  padding: "0 30px 0 0", // Padding en el logo
-                  marginRight: "", // Margin a la derecha del logo
+                  color: "#000000",
+                  padding: "0 30px 0 0",
                 }}
               >
                 NAME
               </Typography>
             </Button>
-            {/* menu navegacion pantalla peque */}
+
+            {/* ---------------------------------------------- Menú de navegación para pantallas pequeñas */}
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
@@ -101,8 +98,9 @@ function ResponsiveAppBar() {
                 aria-haspopup="true"
                 onClick={handleOpenNavMenu}
                 color="inherit"
-                sx={{ padding: "", color: "#000000" }} // Padding en el IconButton
+                sx={{ color: "#000000" }}
               >
+                {/* ---------------------------------------------- Hamburguesa */}
                 <MenuIcon sx={{ fontSize: "2rem" }} />
               </IconButton>
               <Menu
@@ -119,16 +117,10 @@ function ResponsiveAppBar() {
                 }}
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
-                sx={{ display: { xs: "block", md: "none" }, padding: "10px" }} // Padding en el menú
+                sx={{ display: { xs: "block", md: "none" } }}
               >
                 {pages.map((page) => (
-                  <MenuItem
-                    key={page}
-                    onClick={handleCloseNavMenu}
-                    sx={{ margin: "5px 0" }}
-                  >
-                    {" "}
-                    {/* Margin en cada MenuItem */}
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
                     <Typography textAlign="center" sx={{ color: "#000000" }}>
                       {page}
                     </Typography>
@@ -136,7 +128,8 @@ function ResponsiveAppBar() {
                 ))}
               </Menu>
             </Box>
-            {/* Título para pantallas pequeñas */}
+
+            {/* ---------------------------------------------- LOGO pantallas pequeñas */}
             <Typography
               variant="h5"
               noWrap
@@ -147,67 +140,87 @@ function ResponsiveAppBar() {
                 fontFamily: "monospace",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
-                color: "#000000", // Color del texto a negro
-                textDecoration: "none",
-                padding: "", // Padding en el logo
-                marginRight: "", // Margin a la derecha del logo
+                color: "#000000",
               }}
             >
               LOGO
             </Typography>
-            {/* Botones de navegación para pantallas grandes */}
+
+            {/* ---------------------------------------------- Botones de navegación para pantallas grandes */}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={() => navigate(`/${page}`)}
-                  sx={{
-                    my: 2,
-                    color: "#000000", // Color del texto del botón a negro
-                    display: "block",
-                    padding: "10px 20px", // Padding en el botón
-                    margin: "0 5px", // Margin en el botón
-                    fontWeight: 500,
-                    "&:hover": {
-                      fontWeight: 700, // Cambia el fontWeight a 700 cuando se hace hover
-                    },
-                  }}
-                >
-                  {page}
-                </Button>
-              ))}
-            </Box>
-            {/* menu de usuario */}
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton
-                  onClick={handleOpenUserMenu}
-                  sx={{
-                    p: 0,
-                    marginLeft: "",
-                    "&:hover": {
-                      backgroundColor: "#000000", // Color de fondo antes de hover
-                    },
-                  }}
-                >
-                  {" "}
-                  {/* Margin a la izquierda */}
-                  <Avatar
+              {/* Aquí cambiamos Products para que abra el submenú */}
+              {pages.map((page) =>
+                page === "Products" ? (
+                  <Box key={page}>
+                    <Button
+                      onClick={handleOpenProductMenu} // Abrimos el submenú
+                      sx={{
+                        my: 2,
+                        color: "#000000",
+                        display: "block",
+                        padding: "10px 20px",
+                        margin: "0 5px",
+                        fontWeight: 500,
+                        "&:hover": {
+                          fontWeight: 700,
+                        },
+                      }}
+                    >
+                      {page}
+                    </Button>
+                    <Menu
+                      id="product-submenu"
+                      anchorEl={anchorElProduct}
+                      open={Boolean(anchorElProduct)}
+                      onClose={handleCloseProductMenu}
+                    >
+                      {productSubmenu.map((submenuItem) => (
+                        <MenuItem
+                          key={submenuItem}
+                          onClick={() => {
+                            handleCloseProductMenu();
+                            navigate(`/Products/${submenuItem}`);
+                          }}
+                        >
+                          <Typography sx={{ color: "#000000" }}>
+                            {submenuItem}
+                          </Typography>
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </Box>
+                ) : (
+                  <Button
+                    key={page}
+                    onClick={() => navigate(`/${page}`)}
                     sx={{
-                      width: 45,
-                      height: 45,
+                      my: 2,
+                      color: "#000000",
+                      display: "block",
+                      padding: "10px 20px",
+                      margin: "0 5px",
+                      fontWeight: 500,
                       "&:hover": {
-                        backgroundColor: "#333333", // Color de fondo del avatar en hover
+                        fontWeight: 700,
                       },
                     }}
                   >
-                    {" "}
-                    {/* Tamaño del Avatar */}
-                    <AccountCircle sx={{ fontSize: 43 }} />{" "}
-                    {/* Tamaño del ícono */}
+                    {page}
+                  </Button>
+                )
+              )}
+            </Box>
+
+            {/* Menú de usuario */}
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar sx={{ width: 45, height: 45 }}>
+                    <AccountCircle sx={{ fontSize: 43 }} />
                   </Avatar>
                 </IconButton>
               </Tooltip>
+              {/* desplegable usuario login*/}
               <Menu
                 sx={{ mt: "45px" }}
                 id="menu-appbar"
@@ -229,22 +242,17 @@ function ResponsiveAppBar() {
                     key={setting}
                     onClick={() => {
                       handleCloseUserMenu();
-                      navigate("/Sign-in-or-register"); // Navega a la ruta correspondiente
+                      navigate("/Sign-in-or-register");
                     }}
                     sx={{
                       padding: "8px 16px",
-                      fontSize: "0.75rem", // Ajustar el tamaño de la fuente
+                      fontSize: "0.75rem",
                       fontWeight: "normal",
-                      minHeight: "auto",
-                      lineHeight: "1.2",
                     }}
                   >
-                    {" "}
-                    {/* Margin en cada MenuItem */}
                     <Typography textAlign="center" sx={{ color: "#000000" }}>
                       {setting}
-                    </Typography>{" "}
-                    {/* Color del texto a negro  */}
+                    </Typography>
                   </MenuItem>
                 ))}
               </Menu>
